@@ -12,6 +12,10 @@
       "dest": "index.js"
     },
     {
+      "src": "/api/rakuten",
+      "dest": "/index.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/404.html"
     }
