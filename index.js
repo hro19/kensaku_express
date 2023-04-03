@@ -31,7 +31,8 @@ app.get('/api/rakuten', (req, res) => {
     const $ = cheerio.load(htmlParser);
     $(".searchresultitem", htmlParser).each(function () {
       const title = $(this).find(".title").text();
-      const price = $(this).find(".price--OX_YW").text();
+      const priceText = $(this).find(".price--OX_YW").text();
+      const price = parseInt(priceText.replace(/[^\d]/g, ''));
       const img = $(this).find("._verticallyaligned").attr("src");
       rakutenData.push({ title,price,img });
     });
