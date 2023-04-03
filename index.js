@@ -34,7 +34,8 @@ app.get('/api/rakuten', (req, res) => {
       const priceText = $(this).find(".price--OX_YW").text();
       const price = parseInt(priceText.replace(/[^\d]/g, ''));
       const img = $(this).find("._verticallyaligned").attr("src");
-      rakutenData.push({ title,price,img });
+      const url = $(this).find(".content a").attr("href");
+      rakutenData.push({ title,price,img,url });
     });
     res.json(rakutenData); // スクレイピング結果をレスポンスとして送信する位置を修正
   }).catch(error => console.log("error")); 
