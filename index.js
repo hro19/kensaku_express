@@ -6,6 +6,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 const rakutenUrl = "https://search.rakuten.co.jp/search/mall/drone/";
+let rakutenData = []; // constではなくletで宣言
 
 const frequentData = require('./frequent.json'); // frequent.jsonファイルを読み込む
 
@@ -25,24 +26,19 @@ app.post('/api/frequent', (req, res) => {
 
 //楽天スクレイピング
 app.get('/api/rakuten', (req, res) => {
-  axios(rakutenUrl)
-    .then((response) => {
-      const htmlParser = response.data;
-      const $ = cheerio.load(htmlParser);
-      const rakutenData = [];
-      $(".searchresultitem", htmlParser).each(function () {
-        const title = $(this).find(".title").text();
-        const price = $(this).find(".price--OX_YW").text();
-        const img = $(this).find("._verticallyaligned").attr("src");
-        rakutenData.push({ title,price,img });
-      });
-      res.json(rakutenData);
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({ error: 'Failed to fetch Rakuten data' });
+  axios(rakutenUrl).then((response) => {
+    const htmlParser = response.data;
+    const $ = cheerio.load(htmlParser);
+    $(".searchresultitem", htmlParser).each(function () {
+      const title = $(this).find(".title").text();
+      const price = $(this).find(".price--OX_YW").text();
+      const img = $(this).find("._verticallyaligned").attr("src");
+      rakutenData.push({ title,price,img });
     });
+    res.json(rakutenData); // スクレイピング結果をレスポンスとして送信する位置を修正
+  }).catch(error => console.log("error")); 
 });
+
 
 const port = 3000; // ポート番号を指定
 app.listen(port, () => {
