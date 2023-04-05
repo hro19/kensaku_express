@@ -41,18 +41,33 @@ app.get('/api/rakuten', (req, res) => {
   }).catch(error => console.log("error")); 
 });
 
+
+const url = require('url')
+const http = require('http')
+
 const sizeOf = require('image-size')
+
+
+
 app.get('/api/size', (req, res) => {
-  sizeOf("https://gimon-sukkiri.jp/wp-content/uploads/2018/05/shutterstock_558269638-e1526514205779.jpg", (err, dimensions) => {
-    console.log(`width=${dimensions.width},height=${dimensions.height}`);
-    const data = {
-    message: "サイズページの情報を取得しました",
-    corpse: {
-      width: dimensions.width,
-      height: dimensions.height
-     }
-   };
-  res.json(data); 
+  const imgUrls = ['http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg',
+    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg",
+    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg",
+    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg"
+  ];
+  const options = url.parse(imgUrl);
+  const datas = { message: 'サイズページの情報を取得しました' };
+
+  http.get(options, function (response) {
+    const chunks = [];
+    response.on('data', function (chunk) {
+      chunks.push(chunk);
+    }).on('end', function () {
+      const buffer = Buffer.concat(chunks);
+      const { type, width, height } = sizeOf(buffer);
+      datas.corpse = { type, width, height };
+      res.json(datas);
+    });
   });
 });
 
