@@ -52,6 +52,9 @@ app.get('/api/size', async (req, res) => {
     'https://xn--n8jvdy13k5sk1s1d.net/wp/wp-content/uploads/2017/03/kawa.jpg',
     'https://www.worldfolksong.com/songbook/france/img/durance_river.jpg',
     'https://images.pexels.com/photos/4652275/pexels-photo-4652275.jpeg?auto=compress&cs=tinysrgb&h=350.jpg',
+    "https://tcd-theme.com/wp-content/uploads/2019/04/retina-790x480.jpg",
+    "https://liginc.co.jp/wp-content/uploads/2015/05/797.png",
+    "https://japan.zdnet.com/storage/2022/05/25/6c37adbb10e2d44b26e6d71f585f8c34/imagen-text-to-image-ai-composites-2022-promo.jpg",
   ];
 
   const promises = imgUrls.map((imgUrl) => {
