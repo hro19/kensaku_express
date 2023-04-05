@@ -41,6 +41,21 @@ app.get('/api/rakuten', (req, res) => {
   }).catch(error => console.log("error")); 
 });
 
+const sizeOf = require('image-size')
+app.get('/api/size', (req, res) => {
+  sizeOf("https://gimon-sukkiri.jp/wp-content/uploads/2018/05/shutterstock_558269638-e1526514205779.jpg", (err, dimensions) => {
+    console.log(`width=${dimensions.width},height=${dimensions.height}`);
+    const data = {
+    message: "サイズページの情報を取得しました",
+    corpse: {
+      width: dimensions.width,
+      height: dimensions.height
+     }
+   };
+  res.json(data); 
+  });
+});
+
 
 const port = 3000; // ポート番号を指定
 app.listen(port, () => {
