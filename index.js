@@ -42,33 +42,39 @@ app.get('/api/rakuten', (req, res) => {
 });
 
 
-const url = require('url')
-const http = require('http')
+const url = require('url');
+const https = require('https');
+const sizeOf = require('image-size');
 
-const sizeOf = require('image-size')
-
-
-
-app.get('/api/size', (req, res) => {
-  const imgUrls = ['http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg',
-    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg",
-    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg",
-    "http://abehiroshi.la.coocan.jp/abe-top-20190328-2.jpg"
+app.get('/api/size', async (req, res) => {
+  const imgUrls = [
+    'https://gimon-sukkiri.jp/wp-content/uploads/2018/05/shutterstock_558269638-e1526514205779.jpg',
+    'https://xn--n8jvdy13k5sk1s1d.net/wp/wp-content/uploads/2017/03/kawa.jpg',
+    'https://www.worldfolksong.com/songbook/france/img/durance_river.jpg',
+    'https://images.pexels.com/photos/4652275/pexels-photo-4652275.jpeg?auto=compress&cs=tinysrgb&h=350.jpg',
   ];
-  const options = url.parse(imgUrl);
-  const datas = { message: 'サイズページの情報を取得しました' };
 
-  http.get(options, function (response) {
-    const chunks = [];
-    response.on('data', function (chunk) {
-      chunks.push(chunk);
-    }).on('end', function () {
-      const buffer = Buffer.concat(chunks);
-      const { type, width, height } = sizeOf(buffer);
-      datas.corpse = { type, width, height };
-      res.json(datas);
+  const promises = imgUrls.map((imgUrl) => {
+    return new Promise((resolve, reject) => {
+      const options = url.parse(imgUrl);
+      https.get(options, (response) => {
+        const chunks = [];
+        response.on('data', (chunk) => chunks.push(chunk));
+        response.on('end', () => {
+          const buffer = Buffer.concat(chunks);
+          const { type, width, height } = sizeOf(buffer);
+          resolve({ imgUrl, type, width, height });
+        });
+      }).on('error', (err) => reject(err));
     });
   });
+
+  try {
+    const results = await Promise.all(promises);
+    res.json({ message: 'サイズページの情報を取得しました', corpses: results });
+  } catch (error) {
+    res.status(500).json({ message: 'サイズ情報の取得中にエラーが発生しました' });
+  }
 });
 
 
