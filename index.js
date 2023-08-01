@@ -30,11 +30,11 @@ app.get('/api/rakuten', (req, res) => {
     const htmlParser = response.data;
     const $ = cheerio.load(htmlParser);
     $(".searchresultitem", htmlParser).each(function () {
-      const title = $(this).find(".title--I67Sk a").text();
+      const title = $(this).find(".title-link--3Ho6z").text();
       const priceText = $(this).find(".price--OX_YW").text();
       const price = parseInt(priceText.replace(/[^\d]/g, ''));
       const img = $(this).find("._verticallyaligned").attr("src");
-      const url = $(this).find(".searchresultitem .image a").attr("href");
+      const url = title.attr("href");
       rakutenData.push({ title,price,img,url });
     });
     res.json(rakutenData); // スクレイピング結果をレスポンスとして送信する位置を修正
