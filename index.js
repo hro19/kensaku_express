@@ -39,9 +39,12 @@ app.get("/api/rakuten", (req, res) => {
         const img = $(this).find("._verticallyaligned").attr("src");
         const url = $(this).find(".searchresultitem").attr("href");
 
-        // もしrakutenDataに同じURLが存在しなければ、新しいデータとして追加する
-        if (!rakutenData[url]) {
-          rakutenData[url] = { title, price, img, url };
+        // URLが存在する場合のみデータを追加する
+        if (url) {
+          // もしrakutenDataに同じURLが存在しなければ、新しいデータとして追加する
+          if (!rakutenData[url]) {
+            rakutenData[url] = { title, price, img, url };
+          }
         }
       });
 
