@@ -25,20 +25,32 @@ app.post('/api/frequent', (req, res) => {
 
 
 //楽天スクレイピング
-app.get('/api/rakuten', (req, res) => {
-  axios(rakutenUrl).then((response) => {
-    const htmlParser = response.data;
-    const $ = cheerio.load(htmlParser);
-    $(".searchresultitem", htmlParser).each(function () {
-      const title = $(this).find("._verticallyaligned").attr("alt");
-      const priceText = $(this).find(".price--OX_YW").text();
-      const price = parseInt(priceText.replace(/[^\d]/g, ''));
-      const img = $(this).find("._verticallyaligned").attr("src");
-      const url = $(this).find(".searchresultitem").attr("href");
-      rakutenData.push({ title,price,img,url });
-    });
-    res.json(rakutenData); // スクレイピング結果をレスポンスとして送信する位置を修正
-  }).catch(error => console.log("error")); 
+app.get("/api/rakuten", (req, res) => {
+  axios(rakutenUrl)
+    .then((response) => {
+      const htmlParser = response.data;
+      const $ = cheerio.load(htmlParser);
+      const rakutenData = {}; // データを一時的に格納するためのオブジェクトを使用
+
+      $(".searchresultitem", htmlParser).each(function () {
+        const title = $(this).find("._verticallyaligned").attr("alt");
+        const priceText = $(this).find(".price--OX_YW").text();
+        const price = parseInt(priceText.replace(/[^\d]/g, ""));
+        const img = $(this).find("._verticallyaligned").attr("src");
+        const url = $(this).find(".searchresultitem").attr("href");
+
+        // もしrakutenDataに同じURLが存在しなければ、新しいデータとして追加する
+        if (!rakutenData[url]) {
+          rakutenData[url] = { title, price, img, url };
+        }
+      });
+
+      // オブジェクトのキー（一意のURL）を配列に変換する
+      const uniqueRakutenData = Object.values(rakutenData);
+
+      res.json(uniqueRakutenData); // スクレイピング結果をレスポンスとして送信する
+    })
+    .catch((error) => console.log("error"));
 });
 
 
