@@ -96,7 +96,7 @@ app.get('/api/size', async (req, res) => {
 });
 
 
-const port = 3000; // ポート番号を指定
+const port = 8000; // ポート番号を指定
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
