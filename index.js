@@ -1,4 +1,8 @@
 const express = require('express');
+
+const { PrismaClient } = require('./prisma/generated/client'); // Prisma Clientを正しいパスに合わせてインポート
+const prisma = new PrismaClient();
+
 const cors = require('cors');
 const app = express();
 
@@ -95,6 +99,23 @@ app.get('/api/size', async (req, res) => {
   }
 });
 
+// データを作成
+app.post('/api/frequent2', async (req, res) => {
+  const { name, word } = req.body;
+  const result = await prisma.frequent2.create({
+    data: {
+      name,
+      word,
+    },
+  });
+  res.json(result);
+});
+
+// データを取得
+app.get('/api/frequent2', async (req, res) => {
+  const data = await prisma.frequent2.findMany();
+  res.json(data);
+});
 
 const port = 8000; // ポート番号を指定
 app.listen(port, () => {
