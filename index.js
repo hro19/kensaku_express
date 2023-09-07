@@ -1,8 +1,5 @@
 const express = require('express');
 
-const { PrismaClient } = require('./prisma/generated/client'); // Prisma Clientを正しいパスに合わせてインポート
-const prisma = new PrismaClient();
-
 const cors = require('cors');
 const app = express();
 
@@ -25,24 +22,6 @@ app.post('/api/frequent', (req, res) => {
   const newData = req.body; // リクエストボディから新しいデータを取得
   frequentData.data.push(newData); // frequentDataオブジェクトのdataプロパティに新しいデータを追加
   res.json({ message: 'Data added successfully' }); // レスポンスとして追加が完了したことを通知する
-});
-
-// frequent2データを作成
-app.post('/api/frequent2', async (req, res) => {
-  const { name, word } = req.body;
-  const result = await prisma.frequent2.create({
-    data: {
-      name,
-      word,
-    },
-  });
-  res.json(result);
-});
-
-// frequent2データを取得
-app.get('/api/frequent2', async (req, res) => {
-  const data = await prisma.frequent2.findMany();
-  res.json(data);
 });
 
 // app.get('/api/size', async (req, res) => {
