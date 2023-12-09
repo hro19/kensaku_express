@@ -58,6 +58,12 @@ app.post('/api/frequent', (req, res) => {
 //   }
 // });
 
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger.json');
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 const port = 8000; // ポート番号を指定
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
