@@ -7,8 +7,7 @@ const frequentData = require('./frequent.json'); // frequent.jsonファイルを
 app.use(
   cors({
     credentials: true,
-    origin: "https://kensaku-xy2e.vercel.app" 
-    // origin: ["http://localhost:5173", "https://kensaku-xy2e.vercel.app"],
+    origin: ["http://localhost:5173", "https://kensaku-xy2e.vercel.app"],
   })
 );
 app.use(express.json()); // JSONデータを解析するために必要なミドルウェアを追加
