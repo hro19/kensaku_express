@@ -13,7 +13,7 @@ app.use(
 app.use(express.json()); // JSONデータを解析するために必要なミドルウェアを追加
 
 app.get('/api/frequent', (req, res) => {
-    res.cookie("name1", "umekomucookiebyexpress", {maxAge: 60000});
+  res.cookie("name2", "umekomucookiebyexpress", { maxAge: 60000, httpOnly: true });
   res.json(frequentData.data); // frequentDataオブジェクトのdataプロパティを返す
 });
 
