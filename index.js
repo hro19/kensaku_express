@@ -4,16 +4,11 @@ const app = express();
 const cors = require("cors");
 const frequentData = require('./frequent.json'); // frequent.jsonファイルを読み込む
 
-app.use(
-  cors({
-    credentials: true,
-    origin: ["http://localhost:5173", "https://kensaku-xy2e.vercel.app"],
-  })
-);
+app.use(cors());
 app.use(express.json()); // JSONデータを解析するために必要なミドルウェアを追加
 
 app.get('/api/frequent', (req, res) => {
-  res.cookie("name2", "umekomucookiebyexpress", { maxAge: 60000, httpOnly: true });
+  // res.cookie("name2", "umekomucookiebyexpress", { maxAge: 60000, httpOnly: true });
   res.json(frequentData.data); // frequentDataオブジェクトのdataプロパティを返す
 });
 
